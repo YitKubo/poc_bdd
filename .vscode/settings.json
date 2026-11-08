@@ -24,6 +24,10 @@
   "cucumberautocomplete.syntaxes": { "python": "py" },
   "cucumberautocomplete.strictGherkinCompletion": true,
   "cucumberautocomplete.onTypeFormat": false,
+  "cucumberautocomplete.customParameters": [
+    { "parameter": "parsers.parse(", "value": "" },
+    { "parameter": "km/h", "value": "km.h" }
+  ],
 
   "plantuml.render": "Local",
   "plantuml.exportFormat": "svg",

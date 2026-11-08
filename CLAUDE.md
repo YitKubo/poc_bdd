@@ -21,6 +21,12 @@
 
 Dev Container の中では `make test` / `make chart` / `make fmt` / `make lint` を直接使う。
 
+## 言語ルール
+
+- **Gherkin のキーワードは英語**: `# language: en`、`Feature` `Background` `Scenario` `Scenario Outline` `Examples` `Given` `When` `Then` `And`
+- **記述は日本語**: ステップ文、シナリオ名、Feature の説明文、タグ、コメントは日本語（例: `Given 車速が 40 km/h である`）
+- 仕様書（`docs/specs/*.md`）も日本語
+
 ## 構成
 
 - `ecu/` — テスト対象の C。`libecu.so` を `build/` に作る
@@ -38,4 +44,4 @@ Dev Container の中では `make test` / `make chart` / `make fmt` / `make lint`
 ## 書式
 
 保存時に自動整形する。Python は ruff、C は clang-format、Gherkin は reformat-gherkin。
-ステップ文は「`〇〇が 値 単位 である`」「`N ms 経過する`」の形にする（チャート変換のため）。
+ステップ文は「`〇〇が "値 単位" である`」「`"N ms" 経過する`」の形にする（値はダブルクォートで囲む。例: `エンジン回転数が "1200 rpm" である` / `燃料カットが "ON" である` / `"10 ms" 経過する`）（チャート変換のため）。

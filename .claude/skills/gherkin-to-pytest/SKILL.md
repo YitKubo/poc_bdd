@@ -1,6 +1,6 @@
 ---
 name: gherkin-to-pytest
-description: tests/features/ の日本語 Gherkin(feature) から pytest-bdd のテストコードを生成する。足りないステップ定義と、feature に対応する test_*.py を作り、docker compose で実行して通す。「featureをpytestにして」「テストコードを作って」と頼まれたときに使う。
+description: tests/features/ の Gherkin(feature) から pytest-bdd のテストコードを生成する。足りないステップ定義と、feature に対応する test_*.py を作り、docker compose で実行して通す。「featureをpytestにして」「テストコードを作って」と頼まれたときに使う。
 ---
 
 # Gherkin → pytest-bdd

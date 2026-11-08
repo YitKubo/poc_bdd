@@ -1,6 +1,6 @@
 # poc_bdd
 
-パワトレ ECU の振る舞いを **日本語 Gherkin → pytest-bdd** で自動テストする仕組みの PoC です。
+パワトレ ECU の振る舞いを **Gherkin（キーワード英語・記述日本語）→ pytest-bdd** で自動テストする仕組みの PoC です。
 pytest は Docker（compose）上で動かします。
 
 ```

@@ -18,7 +18,7 @@ from pathlib import Path
 from gherkin.parser import Parser
 from gherkin.token_scanner import TokenScanner
 
-ELAPSE = re.compile(r"^(\d+)\s*ms\s*経過する$")
+ELAPSE = re.compile(r'^"(\d+)\s*ms"\s*経過する$')
 SIGNAL = re.compile(r"^(?P<name>.+?)が\s*(?P<value>.+?)\s*である$")
 NUMBER = re.compile(r"^(-?\d+(?:\.\d+)?)\s*(\S*)$")  # 「1200 rpm」のような数値＋単位
 CHECK_WIDTH_MS = 10  # 確認時点の強調表示の幅
@@ -66,7 +66,7 @@ def build_chart(title: str, steps: list[dict], row: dict[str, str]) -> Chart:
         if not m:
             chart.notes.append(text)
             continue
-        name, value = m.group("name"), m.group("value")
+        name, value = m.group("name"), m.group("value").strip('"')
         if kind == "Outcome":
             if name not in chart.outputs:
                 chart.outputs.append(name)
@@ -194,7 +194,7 @@ def convert(feature_path: Path, out_dir: Path) -> list[Path]:
                 header = [c["value"] for c in ex["tableHeader"]["cells"]]
                 for i, r in enumerate(ex["tableBody"], 1):
                     row = dict(zip(header, [c["value"] for c in r["cells"]], strict=True))
-                    label = ", ".join(f"{k}={v}" for k, v in row.items())
+                    label = ", ".join(f"{k}={v}" for k, v in row.items() if k != "備考")
                     variants.append((f"{scenario['name']} [{i}] {label}", row))
         for i, (name, row) in enumerate(variants, 1):
             title = f"{feature['name']} / {name}" + (f"  {tags}" if tags else "")
