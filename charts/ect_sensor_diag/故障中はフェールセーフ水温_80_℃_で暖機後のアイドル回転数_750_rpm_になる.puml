@@ -1,0 +1,22 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title 水温センサ故障検出 / 故障中はフェールセーフ水温 80 ℃ で暖機後のアイドル回転数 750 rpm になる
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温 [℃]" between -10 and 0 as s0
+analog "水温センサ電圧 [mV]" between 0 and 4900 as s1
+concise "確定DTC (期待)" as s2
+analog "目標アイドル回転数 (期待) [rpm]" between 0 and 750 as s3
+
+@0
+s0 is -10
+s1 is 4900
+s2 is "?"
+@500
+s0 is -10
+s1 is 4900
+s2 is "P0118"
+s3 is 750
+highlight 500 to 510 #Gold;line:DimGrey : 確認
+@enduml

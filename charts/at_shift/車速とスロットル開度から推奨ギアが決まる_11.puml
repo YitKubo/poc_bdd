@@ -1,0 +1,19 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title AT 変速判定 / 車速とスロットル開度から推奨ギアが決まる [11] speed=60, throttle=50, gear=3
+legend left
+  ECUが初期化されている
+endlegend
+analog "車速 [km/h]" between 0 and 60 as s0
+analog "スロットル開度 [%]" between 0 and 50 as s1
+analog "推奨ギア (期待) [速]" between 0 and 3 as s2
+
+@0
+s0 is 60
+s1 is 50
+@10
+s0 is 60
+s1 is 50
+s2 is 3
+highlight 10 to 20 #Gold;line:DimGrey : 確認
+@enduml

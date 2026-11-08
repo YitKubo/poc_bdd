@@ -220,6 +220,7 @@ __marimo__/
 .streamlit/secrets.toml
 
 # BDD生成物
-charts/
+# charts/ の .puml/.svg は git 管理する（レビュー用）。確認用 PNG だけ除外
+charts/**/*.png
 reports/
 build/

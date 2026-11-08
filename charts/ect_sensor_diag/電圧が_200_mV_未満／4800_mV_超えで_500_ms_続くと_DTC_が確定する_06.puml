@@ -1,0 +1,17 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title 水温センサ故障検出 / 電圧が 200 mV 未満／4800 mV 超えで 500 ms 続くと DTC が確定する [6] mv=4801, ms=500, dtc=P0118
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温センサ電圧 [mV]" between 0 and 4801 as s0
+concise "確定DTC (期待)" as s1
+
+@0
+s0 is 4801
+s1 is "?"
+@500
+s0 is 4801
+s1 is "P0118"
+highlight 500 to 510 #Gold;line:DimGrey : 確認
+@enduml

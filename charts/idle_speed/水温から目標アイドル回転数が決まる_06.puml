@@ -1,0 +1,16 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title アイドル回転数制御 / 水温から目標アイドル回転数が決まる [6] temp=90, idle=750
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温 [℃]" between 0 and 90 as s0
+analog "目標アイドル回転数 (期待) [rpm]" between 0 and 750 as s1
+
+@0
+s0 is 90
+@10
+s0 is 90
+s1 is 750
+highlight 10 to 20 #Gold;line:DimGrey : 確認
+@enduml

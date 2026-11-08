@@ -1,0 +1,42 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title 水温センサ故障検出 / 断線が 500 ms 続くと DTC が確定し、正常に戻ると解除される  @代表動作
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温 [℃]" between 0 and 30 as s0
+analog "水温センサ電圧 [mV]" between 100 and 2000 as s1
+concise "確定DTC (期待)" as s2
+analog "制御用水温 (期待) [℃]" between 30 and 80 as s3
+
+@0
+s0 is 30
+s1 is 2000
+s2 is "?"
+@99
+s1 is 2000
+@100
+s1 is 100
+s2 is "なし"
+s3 is 30
+@590
+s2 is "なし"
+@599
+s1 is 100
+s3 is 30
+@600
+s1 is 2000
+s2 is "P0117"
+s3 is 80
+@1099
+s3 is 80
+@1100
+s0 is 30
+s1 is 2000
+s2 is "なし"
+s3 is 30
+highlight 100 to 110 #Gold;line:DimGrey : 確認
+highlight 590 to 600 #Gold;line:DimGrey : 確認
+highlight 600 to 610 #Gold;line:DimGrey : 確認
+highlight 1100 to 1110 #Gold;line:DimGrey : 確認
+@enduml
