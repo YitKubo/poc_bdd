@@ -1,0 +1,33 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title 水温センサ故障検出 / 正常に戻った状態が途中で途切れると解除の 500 ms は数え直しになる
+scale 1154 as 700 pixels
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温センサ電圧 [mV]" between 100 and 2000 as s0
+concise "確定DTC (期待)" as s1
+
+@0
+s0 is 100
+s1 is "?"
+@498
+s0 is 100
+@500
+s1 is "P0117"
+@509
+s0 is 2000
+@789
+s0 is 2000
+@800
+s0 is 100
+@810
+s0 is 2000
+@1110
+s1 is "P0117"
+@1154
+s0 is 2000
+@1154
+highlight 500 to 522 #FFD70066;line:DimGrey : 確認
+highlight 1110 to 1132 #FFD70066;line:DimGrey : 確認
+@enduml
