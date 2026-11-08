@@ -10,7 +10,7 @@ description: feature から生成したタイミングチャートを PNG にし
 
 ## 手順
 
-1. `make docker-chart-png` で `charts/**/*.png` を作る（対象 feature のものだけ見ればよい）
+1. `make docker-chart` で `charts/**/*.png` を最新にする（対象 feature のものだけ見ればよい）
 2. 対象の `docs/specs/<名前>.md` と `tests/features/<名前>.feature` を読む
 3. PNG を Read で 1 枚ずつ開いて見る。次を確認する
    - **仕様との一致**: 入力の変化時刻・値、出力の期待値が、仕様書の表としきい値どおりか（境界値の両側が出ているか）
@@ -21,7 +21,7 @@ description: feature から生成したタイミングチャートを PNG にし
    - 図の見え方 → `tools/gherkin2puml.py`
    - シナリオの組み立て → feature（`/spec-to-gherkin`）
    - 仕様との食い違い → 仕様書か feature のどちらが正しいかをユーザーに確認する（勝手に直さない）
-6. 直したら `make docker-chart` で再生成し、`.puml` / `.svg` を feature と一緒にコミットする
+6. 直したら `make docker-chart` で再生成し、`.puml` / `.svg` / `.png` を feature と一緒にコミットする
 
 ## 図の読み方（gherkin2puml の描き方）
 

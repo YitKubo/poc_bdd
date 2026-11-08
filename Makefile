@@ -1,5 +1,5 @@
 # コンテナ内で使うコマンド。ホストからは `make docker-test` / `make docker-chart`
-.PHONY: build test chart chart-png fmt lint clean docker-test docker-chart docker-chart-png docker-lint
+.PHONY: build test chart fmt lint clean docker-test docker-chart docker-lint
 
 build:
 	cmake -S ecu -B build -DCMAKE_BUILD_TYPE=Release
@@ -11,9 +11,6 @@ test: build
 chart:
 	python tools/gherkin2puml.py tests/features charts
 	find charts -name '*.puml' -print0 | xargs -0 -r plantuml -tsvg -charset UTF-8
-
-# AI 確認用の PNG（Read で画像として見られる）。SVG は画像として読めないため別に作る
-chart-png: chart
 	find charts -name '*.puml' -print0 | xargs -0 -r plantuml -tpng -charset UTF-8
 
 fmt:
@@ -36,9 +33,6 @@ docker-test:
 
 docker-chart:
 	docker compose run --rm dev make chart
-
-docker-chart-png:
-	docker compose run --rm dev make chart-png
 
 docker-lint:
 	docker compose run --rm dev make lint

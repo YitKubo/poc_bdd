@@ -13,8 +13,7 @@ pytest は Docker（compose）上で動かします。
 
 ```bash
 docker compose run --rm test     # ビルド + 全シナリオ実行（reports/ にHTMLとcucumber.json）
-make docker-chart                # feature からタイミングチャート(SVG)を charts/ に生成
-make docker-chart-png            # AI 確認用の PNG を生成（/chart-review が使う）
+make docker-chart                # feature からタイミングチャート(SVG/PNG)を charts/ に生成
 make docker-lint                 # 書式チェック
 ```
 

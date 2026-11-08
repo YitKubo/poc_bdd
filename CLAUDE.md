@@ -7,7 +7,7 @@
 - **1 機能 = 仕様書 1 枚 + feature 1 本**
   - `docs/specs/<名前>.md` — 人が読む仕様。数値（しきい値）はここの表が正
   - `tests/features/<名前>.feature` — 合否を決めるテスト。値は仕様書の表から取る
-- `charts/` は feature から自動生成するタイミングチャート。**手で書かない**。`.puml` / `.svg` はレビュー用に git 管理する（feature を変えたら再生成して一緒にコミット）。確認用の `.png` は管理しない
+- `charts/` は feature から自動生成するタイミングチャート。**手で書かない**。`.puml` / `.svg` / `.png` はレビュー用に git 管理する（feature を変えたら再生成して一緒にコミット）
 - 合否の判定は feature だけで行う
 
 ## コマンド（ホストから。すべて docker compose 経由）
@@ -15,8 +15,7 @@
 | やりたいこと | コマンド |
 |---|---|
 | テスト | `docker compose run --rm test`（または `make docker-test`） |
-| タイミングチャート生成 | `make docker-chart` |
-| チャート確認用 PNG 生成 | `make docker-chart-png` |
+| タイミングチャート生成（.puml/.svg/.png） | `make docker-chart` |
 | 整形 | `docker compose run --rm dev make fmt` |
 | 書式チェック | `make docker-lint` |
 
