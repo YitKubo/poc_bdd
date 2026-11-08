@@ -1,0 +1,26 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title レブリミッタ / 減速カットの条件が成り立つ間は、上限から復帰してもカットを続ける [2] throttle=50, state=OFF
+scale 22 as 700 pixels
+legend left
+  ECUが初期化されている
+endlegend
+concise "スロットル開度" as s0
+analog "エンジン回転数 [rpm]" between 6300 and 7000 as s1
+concise "燃料カット (期待)" as s2
+
+@0
+s0 is "50 %"
+s1 is 7000
+s2 is "?"
+@9
+s1 is 7000
+@10
+s1 is 6300
+@20
+s2 is "OFF"
+@22
+s1 is 6300
+@22
+highlight 20 to 21 #FFD70066;line:DimGrey : 確認
+@enduml

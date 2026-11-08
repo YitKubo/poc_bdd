@@ -31,7 +31,8 @@ class Chart:
     title: str
     inputs: list[str] = field(default_factory=list)
     outputs: list[str] = field(default_factory=list)
-    events: list[tuple[int, str, str]] = field(default_factory=list)  # (時刻, 信号, 値)
+    # (時刻, 信号, 値, 確認の直後か)
+    events: list[tuple[int, str, str, bool]] = field(default_factory=list)
     checks: list[int] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
     end_ms: int = 0
@@ -57,11 +58,13 @@ def _step_kinds(steps: list[dict]) -> list[str]:
 def build_chart(title: str, steps: list[dict], row: dict[str, str]) -> Chart:
     chart = Chart(title=title)
     now = 0
+    checked = False  # 直前に確認があり、まだ時間が進んでいない（この間の入力は確認の「後」の変化）
     for step, kind in zip(steps, _step_kinds(steps), strict=True):
         text = _fill(step["text"], row).strip()
         m = ELAPSE.match(text)
         if m:
             now += int(m.group(1))
+            checked = False
             continue
         m = SIGNAL.match(text)
         if not m:
@@ -72,9 +75,10 @@ def build_chart(title: str, steps: list[dict], row: dict[str, str]) -> Chart:
             if name not in chart.outputs:
                 chart.outputs.append(name)
             chart.checks.append(now)
+            checked = True
         elif name not in chart.inputs:
             chart.inputs.append(name)
-        chart.events.append((now, name, value))
+        chart.events.append((now, name, value, checked and kind != "Outcome"))
     chart.end_ms = now
     return chart
 
@@ -111,11 +115,14 @@ def render(chart: Chart) -> str:
     signals = chart.inputs + chart.outputs
     ids = {name: f"s{i}" for i, name in enumerate(signals)}
     series: dict[str, list[tuple[int, str]]] = {name: [] for name in signals}
-    for t, name, value in chart.events:
-        series[name].append((t, value))
-    kinds = {n: _kind_of([v for _, v in series[n]], n in chart.outputs) for n in signals}
     edge_ms = max(1, chart.end_ms // 100)  # 数値が切り替わる前後の傾き（階段状に見せる）
     check_ms = max(1, chart.end_ms // 50)  # 確認時点の帯の幅
+    # 確認の直後に変わる入力は、確認と同じ時刻に描くと「その値で確認した」ように見える。
+    # 帯の幅だけ後ろにずらす（次の「経過する」の最小 10 ms を超えない範囲）。
+    after_ms = min(check_ms, 9)
+    for t, name, value, after_check in chart.events:
+        series[name].append((t + after_ms if after_check else t, value))
+    kinds = {n: _kind_of([v for _, v in series[n]], n in chart.outputs) for n in signals}
     right_ms = chart.end_ms + 2 * check_ms  # 右端: 最後の確認の帯が収まる余白
 
     lines = [

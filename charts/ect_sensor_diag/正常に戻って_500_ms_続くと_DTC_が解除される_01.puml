@@ -1,0 +1,24 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title 水温センサ故障検出 / 正常に戻って 500 ms 続くと DTC が解除される [1] fault=100, ms=490, dtc=P0117
+scale 1028 as 700 pixels
+legend left
+  ECUが初期化されている
+endlegend
+analog "水温センサ電圧 [mV]" between 100 and 2000 as s0
+concise "確定DTC (期待)" as s1
+
+@0
+s0 is 100
+s1 is "?"
+@491
+s0 is 100
+@500
+s0 is 2000
+@990
+s1 is "P0117"
+@1028
+s0 is 2000
+@1028
+highlight 990 to 1009 #FFD70066;line:DimGrey : 確認
+@enduml

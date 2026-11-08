@@ -1,0 +1,20 @@
+@startuml
+skinparam defaultFontName IPAGothic
+title レブリミッタ / スロットル開度に関係なく上限でカットする [3] throttle=100
+scale 12 as 700 pixels
+legend left
+  ECUが初期化されている
+endlegend
+concise "スロットル開度" as s0
+concise "エンジン回転数" as s1
+concise "燃料カット (期待)" as s2
+
+@0
+s0 is "100 %"
+s1 is "6500 rpm"
+s2 is "?"
+@10
+s2 is "ON"
+@12
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
+@enduml
