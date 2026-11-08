@@ -1,37 +1,40 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title レブリミッタ / 上限 6500 rpm でカットし、復帰 6300 rpm まで下がると復帰する  @代表動作
+scale 42 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
-analog "スロットル開度 [%]" between 0 and 50 as s0
+concise "スロットル開度" as s0
 analog "エンジン回転数 [rpm]" between 6000 and 6500 as s1
-binary "燃料カット (期待)" as s2
+concise "燃料カット (期待)" as s2
 
 @0
-s0 is 50
+s0 is "50 %"
 s1 is 6000
+s2 is "?"
 @9
 s1 is 6000
 @10
 s1 is 6500
-s2 is low
+s2 is "OFF"
 @19
 s1 is 6500
 @20
 s1 is 6400
-s2 is high
+s2 is "ON"
 @29
 s1 is 6400
 @30
 s1 is 6300
-s2 is high
+s2 is "ON"
 @40
-s0 is 50
+s2 is "OFF"
+@42
 s1 is 6300
-s2 is low
-highlight 10 to 20 #Gold;line:DimGrey : 確認
-highlight 20 to 30 #Gold;line:DimGrey : 確認
-highlight 30 to 40 #Gold;line:DimGrey : 確認
-highlight 40 to 50 #Gold;line:DimGrey : 確認
+@42
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
+highlight 20 to 21 #FFD70066;line:DimGrey : 確認
+highlight 30 to 31 #FFD70066;line:DimGrey : 確認
+highlight 40 to 41 #FFD70066;line:DimGrey : 確認
 @enduml

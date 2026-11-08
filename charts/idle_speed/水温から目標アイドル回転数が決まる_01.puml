@@ -1,16 +1,18 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title アイドル回転数制御 / 水温から目標アイドル回転数が決まる [1] temp=-10, idle=1200
+scale 12 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
-analog "水温 [℃]" between -10 and 0 as s0
-analog "目標アイドル回転数 (期待) [rpm]" between 0 and 1200 as s1
+concise "水温" as s0
+concise "目標アイドル回転数 (期待)" as s1
 
 @0
-s0 is -10
+s0 is "-10 ℃"
+s1 is "?"
 @10
-s0 is -10
-s1 is 1200
-highlight 10 to 20 #Gold;line:DimGrey : 確認
+s1 is "1200 rpm"
+@12
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
 @enduml

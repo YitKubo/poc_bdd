@@ -1,19 +1,20 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title 減速時燃料カット / カット開始条件（全閉 2 % 以下かつ 1500 rpm 超え） [3] throttle=2, rpm=3000, state=ON
+scale 12 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
-analog "スロットル開度 [%]" between 0 and 2 as s0
-analog "エンジン回転数 [rpm]" between 0 and 3000 as s1
-binary "燃料カット (期待)" as s2
+concise "スロットル開度" as s0
+concise "エンジン回転数" as s1
+concise "燃料カット (期待)" as s2
 
 @0
-s0 is 2
-s1 is 3000
+s0 is "2 %"
+s1 is "3000 rpm"
+s2 is "?"
 @10
-s0 is 2
-s1 is 3000
-s2 is high
-highlight 10 to 20 #Gold;line:DimGrey : 確認
+s2 is "ON"
+@12
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
 @enduml

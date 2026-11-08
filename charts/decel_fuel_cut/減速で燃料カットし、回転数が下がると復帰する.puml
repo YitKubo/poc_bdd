@@ -1,31 +1,34 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title 減速時燃料カット / 減速で燃料カットし、回転数が下がると復帰する  @代表動作
+scale 32 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
-analog "スロットル開度 [%]" between -1 and 1 as s0
+concise "スロットル開度" as s0
 analog "エンジン回転数 [rpm]" between 1100 and 3000 as s1
-binary "燃料カット (期待)" as s2
+concise "燃料カット (期待)" as s2
 
 @0
-s0 is 0
+s0 is "0 %"
 s1 is 3000
+s2 is "?"
 @9
 s1 is 3000
 @10
 s1 is 1200
-s2 is high
+s2 is "ON"
 @19
 s1 is 1200
 @20
 s1 is 1100
-s2 is high
+s2 is "ON"
 @30
-s0 is 0
+s2 is "OFF"
+@32
 s1 is 1100
-s2 is low
-highlight 10 to 20 #Gold;line:DimGrey : 確認
-highlight 20 to 30 #Gold;line:DimGrey : 確認
-highlight 30 to 40 #Gold;line:DimGrey : 確認
+@32
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
+highlight 20 to 21 #FFD70066;line:DimGrey : 確認
+highlight 30 to 31 #FFD70066;line:DimGrey : 確認
 @enduml

@@ -1,6 +1,7 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title 水温センサ故障検出 / 異常が途中で途切れると 500 ms の継続時間は数え直しになる
+scale 634 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
@@ -10,16 +11,18 @@ concise "確定DTC (期待)" as s1
 @0
 s0 is 100
 s1 is "?"
-@299
+@294
 s0 is 100
 @300
 s0 is 2000
-@309
+@304
 s0 is 2000
 @310
 s0 is 100
 @610
-s0 is 100
 s1 is "なし"
-highlight 610 to 620 #Gold;line:DimGrey : 確認
+@634
+s0 is 100
+@634
+highlight 610 to 622 #FFD70066;line:DimGrey : 確認
 @enduml

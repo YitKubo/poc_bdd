@@ -1,19 +1,20 @@
 @startuml
 skinparam defaultFontName IPAGothic
 title AT 変速判定 / 車速とスロットル開度から推奨ギアが決まる [4] speed=39, throttle=10, gear=2
+scale 12 as 700 pixels
 legend left
   ECUが初期化されている
 endlegend
-analog "車速 [km/h]" between 0 and 39 as s0
-analog "スロットル開度 [%]" between 0 and 10 as s1
-analog "推奨ギア (期待) [速]" between 0 and 2 as s2
+concise "車速" as s0
+concise "スロットル開度" as s1
+concise "推奨ギア (期待)" as s2
 
 @0
-s0 is 39
-s1 is 10
+s0 is "39 km/h"
+s1 is "10 %"
+s2 is "?"
 @10
-s0 is 39
-s1 is 10
-s2 is 2
-highlight 10 to 20 #Gold;line:DimGrey : 確認
+s2 is "2 速"
+@12
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
 @enduml
