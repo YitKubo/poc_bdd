@@ -11,14 +11,17 @@ concise "確定DTC (期待)" as s1
 @0
 s0 is 100
 s1 is "?"
-@490
+@499
 s0 is 100
 @500
+s1 is "P0117"
+@509
 s0 is 200
 @1000
 s1 is "なし"
 @1040
 s0 is 200
 @1040
+highlight 500 to 520 #FFD70066;line:DimGrey : 確認
 highlight 1000 to 1020 #FFD70066;line:DimGrey : 確認
 @enduml
