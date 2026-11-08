@@ -20,7 +20,9 @@ from gherkin.token_scanner import TokenScanner
 
 ELAPSE = re.compile(r"^(\d+)\s*ms\s*経過する$")
 SIGNAL = re.compile(r"^(?P<name>.+?)が\s*(?P<value>.+?)\s*である$")
+NUMBER = re.compile(r"^(-?\d+(?:\.\d+)?)\s*(\S*)$")  # 「1200 rpm」のような数値＋単位
 CHECK_WIDTH_MS = 10  # 確認時点の強調表示の幅
+ANALOG_EDGE_MS = 1  # 数値が切り替わる前後の傾きの幅（階段状に見せる）
 
 
 @dataclass
@@ -76,36 +78,85 @@ def build_chart(title: str, steps: list[dict], row: dict[str, str]) -> Chart:
     return chart
 
 
+def _kind_of(values: list[str]) -> str:
+    """信号の描き方: 数値は analog（物理値の波形）、ON/OFF は binary、他は concise（文字）。"""
+    if all(NUMBER.match(v) for v in values):
+        return "analog"
+    if all(v in ("ON", "OFF") for v in values):
+        return "binary"
+    return "concise"
+
+
+def _unit_of(values: list[str]) -> str:
+    return NUMBER.match(values[0]).group(2)
+
+
+def _range_of(nums: list[float]) -> tuple[float, float]:
+    """縦軸の範囲。軸の上下に実際の最小値・最大値が出るようにする。"""
+    lo, hi = min(nums), max(nums)
+    if lo == hi:  # 一定値: 0 を片側に置き、値が軸の端に表示されるようにする
+        lo, hi = (min(lo, 0), max(hi, 0)) if lo != 0 else (-1, 1)
+    return lo, hi
+
+
+def _num(x: float) -> str:
+    return str(int(x)) if float(x).is_integer() else str(x)
+
+
 def render(chart: Chart) -> str:
     signals = chart.inputs + chart.outputs
     ids = {name: f"s{i}" for i, name in enumerate(signals)}
-    first_at = {}
-    for t, name, _ in chart.events:
-        first_at.setdefault(name, t)
+    series: dict[str, list[tuple[int, str]]] = {name: [] for name in signals}
+    for t, name, value in chart.events:
+        series[name].append((t, value))
+    kinds = {n: _kind_of([v for _, v in series[n]]) for n in signals}
 
     lines = ["@startuml", "skinparam defaultFontName IPAGothic", f"title {chart.title}"]
     if chart.notes:
         lines.append("legend left")
         lines.extend(f"  {note}" for note in chart.notes)
         lines.append("endlegend")
-    for name in chart.inputs:
-        lines.append(f'concise "{name}" as {ids[name]}')
-    for name in chart.outputs:
-        lines.append(f'concise "{name} (期待)" as {ids[name]}')
+    for name in signals:
+        values = [v for _, v in series[name]]
+        label = name + (" (期待)" if name in chart.outputs else "")
+        if kinds[name] == "analog":
+            unit = _unit_of(values)
+            lo, hi = _range_of([float(NUMBER.match(v).group(1)) for v in values])
+            label += f" [{unit}]" if unit else ""
+            lines.append(f'analog "{label}" between {_num(lo)} and {_num(hi)} as {ids[name]}')
+        else:
+            lines.append(f'{kinds[name]} "{label}" as {ids[name]}')
     lines.append("")
 
-    by_time: dict[int, list[tuple[str, str]]] = {}
-    for t, name, value in chart.events:
-        by_time.setdefault(t, []).append((name, value))
-    for name in signals:  # 最初の値が 0 ms より後の信号は、それまで「?」にする
-        if first_at.get(name, 0) > 0:
-            by_time.setdefault(0, []).append((name, "?"))
+    # 時刻ごとの点を作る。analog は変化の直前にも点を打って、階段状に変化させる。
+    points: dict[int, list[str]] = {}
 
-    for t in sorted(by_time):
+    def put(t: int, name: str, text: str) -> None:
+        points.setdefault(t, []).append(f"{ids[name]} is {text}")
+
+    for name in signals:
+        kind, prev_t, prev_v = kinds[name], None, None
+        for t, value in series[name]:
+            if kind == "analog":
+                num = _num(float(NUMBER.match(value).group(1)))
+                if prev_v is not None and prev_v != num and t - ANALOG_EDGE_MS > prev_t:
+                    put(t - ANALOG_EDGE_MS, name, prev_v)
+                put(t, name, num)
+                prev_v = num
+            elif kind == "binary":
+                put(t, name, "high" if value == "ON" else "low")
+            else:
+                put(t, name, f'"{value}"')
+            prev_t = t
+        if series[name] and series[name][0][0] > 0 and kind == "concise":
+            put(0, name, '"?"')  # 最初の値が 0 ms より後の信号は、それまで「?」
+        if kind == "analog" and prev_t is not None and prev_t < chart.end_ms:
+            put(chart.end_ms, name, prev_v)  # 最後の値を図の右端まで延ばす
+
+    for t in sorted(points):
         lines.append(f"@{t}")
-        for name, value in by_time[t]:
-            lines.append(f'{ids[name]} is "{value}"')
-    if chart.end_ms not in by_time:
+        lines.extend(points[t])
+    if chart.end_ms not in points:
         lines.append(f"@{chart.end_ms}")
     for t in sorted(set(chart.checks)):
         lines.append(f"highlight {t} to {t + CHECK_WIDTH_MS} #Gold;line:DimGrey : 確認")

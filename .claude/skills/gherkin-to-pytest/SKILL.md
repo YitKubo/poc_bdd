@@ -17,11 +17,18 @@ description: tests/features/ の日本語 Gherkin(feature) から pytest-bdd の
    - 入力: `@given(parsers.parse(...))` と `@when(parsers.parse(...))` を重ねて付け、`ecu.set_input("<フィールド名>", 値)` を呼ぶ
    - 出力: `@then(parsers.parse(...))` で `ecu.outputs.<フィールド名>` を `assert` する
    - 数値は `{名前:d}`、ON/OFF などの文字列は `{名前}` で受ける
+   - 関数には `"""入力 <フィールド名> [単位]"""` / `"""出力 <フィールド名> ..."""` の docstring を付け、
+     `common_steps.py` 冒頭の対応表にも 1 行足す（Python だけで信号の意味が分かるように）
    - 入力・出力のフィールドが ECU に無ければ、`ecu/include/ecu.h` と `tests/ecu_driver.py` の両方に足す（先にユーザーに知らせる）
 5. **テストファイルを作る**: `tests/steps/test_<feature名>.py`
 
    ```python
-   """機能名"""
+   """機能名
+
+   仕様（しきい値の根拠）: docs/specs/<feature名>.md
+   振る舞い（条件と期待値）: tests/features/<feature名>.feature
+   ここには条件・期待値を書かない。ステップの意味は common_steps.py を参照。
+   """
 
    from pytest_bdd import scenarios
 
