@@ -1,0 +1,24 @@
+# コンテナ内のツールを使う（ネットワーク不要）。`make fmt` / `make lint` と同じ内容。
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: ruff format
+        language: system
+        types: [python]
+      - id: clang-format
+        name: clang-format
+        entry: clang-format -i
+        language: system
+        files: ^ecu/.*\.[ch]$
+      - id: reformat-gherkin
+        name: reformat-gherkin
+        entry: reformat-gherkin
+        language: system
+        files: \.feature$

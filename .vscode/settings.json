@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "[c]": { "editor.defaultFormatter": "xaver.clang-format" },
+  "[cpp]": { "editor.defaultFormatter": "xaver.clang-format" },
+
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["tests/steps"],
+
+  "cucumber.features": ["tests/features/**/*.feature"],
+  "cucumber.glue": ["tests/steps/**/*.py"],
+
+  "cucumberautocomplete.steps": ["tests/steps/*.py"],
+  "cucumberautocomplete.syntaxes": { "python": "py" },
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "cucumberautocomplete.onTypeFormat": false,
+
+  "plantuml.render": "Local",
+  "plantuml.exportFormat": "svg",
+  "plantuml.diagramsRoot": "charts",
+  "plantuml.exportOutDir": "charts",
+
+  "files.associations": {
+    "*.feature": "feature"
+  },
+  "cmake.sourceDirectory": "/home/kubo/poc_bdd/ecu"
+}

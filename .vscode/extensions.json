@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
+    "CucumberOpen.cucumber-official",
+    "alexkrechik.cucumberautocomplete",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "ms-vscode.cpptools",
+    "ms-vscode.cmake-tools",
+    "xaver.clang-format",
+    "jebbs.plantuml",
+    "EditorConfig.EditorConfig"
+  ]
+}

@@ -1,0 +1,42 @@
+---
+name: gherkin-to-pytest
+description: tests/features/ の日本語 Gherkin(feature) から pytest-bdd のテストコードを生成する。足りないステップ定義と、feature に対応する test_*.py を作り、docker compose で実行して通す。「featureをpytestにして」「テストコードを作って」と頼まれたときに使う。
+---
+
+# Gherkin → pytest-bdd
+
+入力は **feature ファイルだけ**。仕様書やチャートからテストの判定を作らない。
+
+## 手順
+
+1. **対象の feature を読む**（パスが無ければ `tests/features/` の中で `tests/steps/test_<名前>.py` が無いものを探す）
+2. **ステップを洗い出す**: 背景・シナリオ・アウトラインのステップ文を全部集める
+   （アウトラインの `<列名>` は例の値に置き換わった形で一致する）
+3. **既存の定義と照合する**: `tests/steps/common_steps.py` を読み、一致するものは再利用する
+4. **足りないステップだけ追加する**（`tests/steps/common_steps.py` に書く）
+   - 入力: `@given(parsers.parse(...))` と `@when(parsers.parse(...))` を重ねて付け、`ecu.set_input("<フィールド名>", 値)` を呼ぶ
+   - 出力: `@then(parsers.parse(...))` で `ecu.outputs.<フィールド名>` を `assert` する
+   - 数値は `{名前:d}`、ON/OFF などの文字列は `{名前}` で受ける
+   - 入力・出力のフィールドが ECU に無ければ、`ecu/include/ecu.h` と `tests/ecu_driver.py` の両方に足す（先にユーザーに知らせる）
+5. **テストファイルを作る**: `tests/steps/test_<feature名>.py`
+
+   ```python
+   """機能名"""
+
+   from pytest_bdd import scenarios
+
+   scenarios("<feature名>.feature")
+   ```
+
+   （`bdd_features_base_dir` が `tests/features` なので、ファイル名だけでよい）
+6. **実行する**: `docker compose run --rm test`
+   - `StepDefinitionNotFoundError` が出たら、ステップ文との不一致を直す。**feature の文を変えるのは最後の手段**（変えるなら理由を伝える）
+   - 失敗したテストは、feature・ステップ・ECU のどれが原因かを切り分けて報告する。**合格させるために期待値を書き換えない**
+7. **整形する**: `docker compose run --rm dev make fmt` → `make lint`
+8. 結果（通ったシナリオ数、追加したステップ）を短く報告する
+
+## 注意
+
+- 「経過する」は `ecu.run_for_ms(ms)` を呼ぶ。ECU の周期は 10 ms
+- 各シナリオは新しい `ecu` fixture（`ecu.reset()` 済み）で始まる
+- ステップ名は日本語のまま。関数名は `_` 始まりの英語でよい

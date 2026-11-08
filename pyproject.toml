@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+testpaths = ["tests/steps"]
+pythonpath = ["tests", "tests/steps"]
+bdd_features_base_dir = "tests/features"
+addopts = "-ra --html=reports/report.html --self-contained-html --cucumberjson=reports/cucumber.json"
+filterwarnings = ["ignore::pytest.PytestUnknownMarkWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["build", "charts", "reports"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/steps/conftest.py" = ["F401", "F403"]

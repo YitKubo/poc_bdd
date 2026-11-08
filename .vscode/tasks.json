@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "BDD: テスト実行 (docker compose)",
+      "type": "shell",
+      "command": "docker compose run --rm test",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "BDD: feature からタイミングチャート生成 (docker compose)",
+      "type": "shell",
+      "command": "docker compose run --rm dev make chart",
+      "problemMatcher": []
+    },
+    {
+      "label": "BDD: 整形 (docker compose)",
+      "type": "shell",
+      "command": "docker compose run --rm dev make fmt",
+      "problemMatcher": []
+    },
+    {
+      "label": "BDD: 書式チェック (docker compose)",
+      "type": "shell",
+      "command": "docker compose run --rm dev make lint",
+      "problemMatcher": []
+    }
+  ]
+}

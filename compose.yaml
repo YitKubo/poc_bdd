@@ -1,0 +1,19 @@
+x-base: &base
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+  image: poc-bdd-dev
+  volumes:
+    - .:/work
+  working_dir: /work
+
+services:
+  # VSCode Dev Container 用（常駐）
+  dev:
+    <<: *base
+    command: sleep infinity
+
+  # テスト実行用（実行して終了）
+  test:
+    <<: *base
+    command: make test
