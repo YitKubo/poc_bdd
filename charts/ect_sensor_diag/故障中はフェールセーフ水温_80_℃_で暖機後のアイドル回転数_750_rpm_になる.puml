@@ -8,16 +8,19 @@ endlegend
 concise "水温" as s0
 concise "水温センサ電圧" as s1
 concise "確定DTC (期待)" as s2
-concise "目標アイドル回転数 (期待)" as s3
+concise "制御用水温 (期待)" as s3
+concise "目標アイドル回転数 (期待)" as s4
 
 @0
 s0 is "-10 ℃"
 s1 is "4900 mV"
 s2 is "?"
 s3 is "?"
+s4 is "?"
 @500
 s2 is "P0118"
-s3 is "750 rpm"
+s3 is "80 ℃"
+s4 is "750 rpm"
 @520
 highlight 500 to 510 #FFD70066;line:DimGrey : 確認
 @enduml

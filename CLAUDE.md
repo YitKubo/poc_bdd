@@ -23,7 +23,7 @@ Dev Container の中では `make test` / `make chart` / `make fmt` / `make lint`
 
 ## 言語ルール
 
-- **Gherkin のキーワードは英語**: `# language: en`、`Feature` `Background` `Scenario` `Scenario Outline` `Examples` `Given` `When` `Then` `And`
+- **Gherkin のキーワードは英語**（既定の言語なので `# language: en` は書かない。整形ツールの reformat-gherkin が消すため）: `Feature` `Background` `Scenario` `Scenario Outline` `Examples` `Given` `When` `Then` `And`
 - **記述は日本語**: ステップ文、シナリオ名、Feature の説明文、タグ、コメントは日本語（例: `Given 車速が 40 km/h である`）
 - 仕様書（`docs/specs/*.md`）も日本語
 

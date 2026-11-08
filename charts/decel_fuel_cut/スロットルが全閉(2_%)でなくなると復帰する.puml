@@ -13,14 +13,16 @@ concise "燃料カット (期待)" as s2
 s0 is 0
 s1 is "3000 rpm"
 s2 is "?"
-@9
-s0 is 0
 @10
+s0 is 0
+s2 is "ON"
+@11
 s0 is 10
 @20
 s2 is "OFF"
 @22
 s0 is 10
 @22
+highlight 10 to 11 #FFD70066;line:DimGrey : 確認
 highlight 20 to 21 #FFD70066;line:DimGrey : 確認
 @enduml

@@ -40,7 +40,9 @@ Feature: レブリミッタ
     Given スロットル開度が "50 %" である
     And エンジン回転数が "7000 rpm" である
     When "10 ms" 経過する
-    And エンジン回転数が "<rpm> rpm" である
+    # カット中であることを先に確かめる
+    Then 燃料カットが "ON" である
+    When エンジン回転数が "<rpm> rpm" である
     And "10 ms" 経過する
     Then 燃料カットが "<state>" である
 
@@ -66,7 +68,9 @@ Feature: レブリミッタ
     Given スロットル開度が "<throttle> %" である
     And エンジン回転数が "7000 rpm" である
     When "10 ms" 経過する
-    And エンジン回転数が "6300 rpm" である
+    # カット中であることを先に確かめる
+    Then 燃料カットが "ON" である
+    When エンジン回転数が "6300 rpm" である
     And "10 ms" 経過する
     Then 燃料カットが "<state>" である
 
